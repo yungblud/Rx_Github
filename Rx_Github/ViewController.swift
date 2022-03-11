@@ -11,8 +11,10 @@ import RxCocoa
 import RxSwift
 
 class ViewController: UIViewController {
-    fileprivate let searchBar = UISearchBar()
     fileprivate let disposeBag = DisposeBag()
+    
+    fileprivate let searchBar = UISearchBar()
+    fileprivate let tableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,10 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationItem.titleView = self.searchBar
         self.searchBar.placeholder = "Search"
+        
+        self.tableView.keyboardDismissMode = .onDrag
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.view.addSubview(self.tableView)
         
         self.bind()
     }
@@ -35,6 +41,11 @@ class ViewController: UIViewController {
                 print(value)
             }
             .disposed(by: self.disposeBag)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.tableView.frame = self.view.bounds
     }
 }
 
