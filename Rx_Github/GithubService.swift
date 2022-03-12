@@ -31,23 +31,18 @@ class GithubService {
             .catchAndReturn([])
     }
     
-    func getRepo(fullName: String) -> Observable<GithubRepository?> {
+    func getRepo(fullName: String) -> Observable<GithubRepository> {
         let url = URL(string: "https://api.github.com/repos/\(fullName)")!
         return URLSession.shared.rx.json(url: url)
-            .map { data -> GithubRepository? in
+            .compactMap({ data -> GithubRepository? in
                 guard let json = data as? [String: Any] else { return nil }
                 guard let name = json["name"] as? String else { return nil }
                 guard let fullName = json["full_name"] as? String else { return nil }
                 let githubRepository = GithubRepository(name: name, fullName: fullName)
                 return githubRepository
-//                guard let data = data as? Data else { return nil }
-//                let decoder = JSONDecoder()
-//                guard let githubRepository = try? decoder.decode(GithubRepository.self, from: data) else { return nil }
-//                return githubRepository
-            }
-            .catch({ error in
-                print("myError, \(error.localizedDescription)")
-                return .just(nil)
             })
+            .catch { error in
+                return .empty()
+            }
     }
 }

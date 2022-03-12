@@ -15,6 +15,8 @@ class RepoViewController: UIViewController {
     fileprivate let githubService: GithubService
     fileprivate var disposeBag = DisposeBag()
     
+    fileprivate let currentRepository = PublishSubject<GithubRepository>()
+    
     init(repoFullName: String, githubService: GithubService) {
         self.repoFullName = repoFullName
         self.githubService = githubService
@@ -34,13 +36,14 @@ class RepoViewController: UIViewController {
     func bind() {
         self.githubService.getRepo(fullName: self.repoFullName)
             .debug()
-            .subscribe(onNext: { [weak self] githubRepo in
-                guard let `self` = self else { return }
-                guard let githubRepo = githubRepo else { return }
-                DispatchQueue.main.async {
-                    self.navigationItem.title = githubRepo.full_name
-                }
-            })
+            .compactMap { $0 }
+            .bind(to: self.currentRepository)
             .disposed(by: self.disposeBag)
+    
+        self.currentRepository
+            .map { $0.full_name }
+            .bind(to: self.navigationItem.rx.title)
+            .disposed(by: self.disposeBag)
+            
     }
 }
