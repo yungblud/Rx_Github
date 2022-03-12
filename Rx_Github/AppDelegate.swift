@@ -7,7 +7,7 @@
 
 import UIKit
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
@@ -17,7 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.backgroundColor = .white
         window.makeKeyAndVisible()
 
-        let rootViewController = ViewController()
+        let githubService = GithubService()
+        let rootViewController = ViewController(githubService: githubService)
         let rootNavigationController = UINavigationController(rootViewController: rootViewController)
         window.rootViewController = rootNavigationController
 

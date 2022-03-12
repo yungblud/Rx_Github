@@ -11,11 +11,22 @@ import RxCocoa
 import RxSwift
 
 class ViewController: UIViewController {
-    fileprivate let disposeBag = DisposeBag()
+    fileprivate let githubService: GithubService
+    fileprivate var disposeBag = DisposeBag()
     
     fileprivate let searchBar = UISearchBar()
     fileprivate let tableView = UITableView()
     
+    init(githubService: GithubService) {
+        self.githubService = githubService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -34,11 +45,13 @@ class ViewController: UIViewController {
         self.searchBar.rx.text.changed
             .throttle(.milliseconds(3000), scheduler: MainScheduler.instance)
             .debug()
-            .subscribe { [weak self] input in
-                guard let `self` = self else { return }
-                guard let inputElement = input.element else { return }
-                guard let value = inputElement else { return }
-                print(value)
+            .flatMapLatest({ [weak self] query -> Observable<[String]> in
+                guard let `self` = self else { return .just([]) }
+                guard let query = query else { return .just([]) }
+                return self.githubService.search(query: query)
+            })
+            .bind(to: self.tableView.rx.items(cellIdentifier: "cell")) { row, name, cell in
+                cell.textLabel?.text = name
             }
             .disposed(by: self.disposeBag)
     }
