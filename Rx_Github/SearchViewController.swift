@@ -60,7 +60,7 @@ class SearchViewController: UIViewController {
                 guard let selectedCell = self.tableView.cellForRow(at: indexPath) else { return }
                 guard let selectedRepoFullName = selectedCell.textLabel?.text else { return }
                 guard let navigationController = self.navigationController else { return }
-                let repoViewController = RepoViewController(repoFullName: selectedRepoFullName)
+                let repoViewController = RepoViewController(repoFullName: selectedRepoFullName, githubService: self.githubService)
                 navigationController.pushViewController(repoViewController, animated: true)
             })
             .disposed(by: self.disposeBag)
@@ -71,10 +71,3 @@ class SearchViewController: UIViewController {
         self.tableView.frame = self.view.bounds
     }
 }
-
-//extension SearchViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let navigationController = self.navigationController else { return }
-//        let selectedRepo = self.tableView.item
-//    }
-//}

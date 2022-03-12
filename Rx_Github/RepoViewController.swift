@@ -7,10 +7,17 @@
 
 import UIKit
 
+import RxCocoa
+import RxSwift
+
 class RepoViewController: UIViewController {
-    fileprivate let repoFulleName: String
-    init(repoFullName: String) {
-        self.repoFulleName = repoFullName
+    fileprivate let repoFullName: String
+    fileprivate let githubService: GithubService
+    fileprivate var disposeBag = DisposeBag()
+    
+    init(repoFullName: String, githubService: GithubService) {
+        self.repoFullName = repoFullName
+        self.githubService = githubService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -21,5 +28,19 @@ class RepoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        self.bind()
+    }
+    
+    func bind() {
+        self.githubService.getRepo(fullName: self.repoFullName)
+            .debug()
+            .subscribe(onNext: { [weak self] githubRepo in
+                guard let `self` = self else { return }
+                guard let githubRepo = githubRepo else { return }
+                DispatchQueue.main.async {
+                    self.navigationItem.title = githubRepo.full_name
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
