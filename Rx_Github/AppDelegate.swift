@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
 
         let githubService = GithubService()
-        let rootViewController = ViewController(githubService: githubService)
+        let rootViewController = SearchViewController(githubService: githubService)
         let rootNavigationController = UINavigationController(rootViewController: rootViewController)
         window.rootViewController = rootNavigationController
 

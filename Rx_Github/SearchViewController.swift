@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class ViewController: UIViewController {
+class SearchViewController: UIViewController {
     fileprivate let githubService: GithubService
     fileprivate var disposeBag = DisposeBag()
     
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
 
     func bind() {
         self.searchBar.rx.text.changed
-            .throttle(.milliseconds(3000), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
             .debug()
             .flatMapLatest({ [weak self] query -> Observable<[String]> in
                 guard let `self` = self else { return .just([]) }
@@ -54,6 +54,16 @@ class ViewController: UIViewController {
                 cell.textLabel?.text = name
             }
             .disposed(by: self.disposeBag)
+        
+        self.tableView.rx.itemSelected
+            .subscribe(onNext: { indexPath in
+                guard let selectedCell = self.tableView.cellForRow(at: indexPath) else { return }
+                guard let selectedRepoFullName = selectedCell.textLabel?.text else { return }
+                guard let navigationController = self.navigationController else { return }
+                let repoViewController = RepoViewController(repoFullName: selectedRepoFullName)
+                navigationController.pushViewController(repoViewController, animated: true)
+            })
+            .disposed(by: self.disposeBag)
     }
     
     override func viewDidLayoutSubviews() {
@@ -62,3 +72,9 @@ class ViewController: UIViewController {
     }
 }
 
+//extension SearchViewController: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let navigationController = self.navigationController else { return }
+//        let selectedRepo = self.tableView.item
+//    }
+//}
