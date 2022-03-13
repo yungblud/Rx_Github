@@ -8,16 +8,6 @@
 import RxCocoa
 import RxSwift
 
-struct GithubRepository: Codable {
-    var name: String
-    var full_name: String
-    
-    init(name: String, fullName: String) {
-        self.name = name
-        self.full_name = fullName
-    }
-}
-
 class GithubService {
     func search(query: String) -> Observable<[String]> {
         guard !query.isEmpty else { return .just([]) }
