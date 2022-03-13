@@ -1,5 +1,5 @@
 //
-//  OwnerAvatarCell.swift
+//  OwnerAvatarSectionHeader.swift
 //  Rx_Github
 //
 //  Created by Dong-Ho Choi on 2022/03/13.
@@ -8,21 +8,13 @@
 import UIKit
 import SnapKit
 
-class OwnerAvatarCell: UICollectionViewCell {
+class OwnerAvatarSectionHeader: UICollectionReusableView {
     fileprivate lazy var imageView: UIImageView = {
         let iv = UIImageView()
-//        iv.sizeToFit()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
         return iv
     }()
-    
     override init(frame: CGRect) {
-        super.init(frame: .zero)
-        self.contentView.addSubview(self.imageView)
-        self.imageView.snp.makeConstraints { make in
-            make.edges.equalTo(self.contentView)
-        }
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +22,10 @@ class OwnerAvatarCell: UICollectionViewCell {
     }
     
     func configure(avatarURL: String) {
+        self.addSubview(self.imageView)
+        self.imageView.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
         DispatchQueue.global().async { [weak self] in
             guard let `self` = self else { return }
             let imageURL = URL(string: avatarURL)!
@@ -40,4 +36,5 @@ class OwnerAvatarCell: UICollectionViewCell {
             }
         }
     }
+    
 }

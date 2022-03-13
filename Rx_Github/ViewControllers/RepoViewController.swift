@@ -17,14 +17,21 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
     fileprivate var disposeBag = DisposeBag()
     
     fileprivate let currentRepository = PublishSubject<GithubRepository>()
-    fileprivate let repoCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    fileprivate lazy var repoCollectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: self.repoCollectionViewFlowLayout)
         cv.alwaysBounceVertical = true
+        cv.contentInsetAdjustmentBehavior = .always
+        cv.register(OwnerAvatarSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "OwnerAvatarSectionHeader")
+        cv.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DefaultSectionHeader")
         cv.register(RepoBasicInformationCell.self, forCellWithReuseIdentifier: "BasicInformationCell")
-        cv.register(OwnerAvatarCell.self, forCellWithReuseIdentifier: "OwnerAvatarCell")
+        cv.register(DefaultCollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
         return cv
+    }()
+    fileprivate lazy var repoCollectionViewFlowLayout: UICollectionViewStretchFlowLayout = {
+        let layout = UICollectionViewStretchFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        return layout
     }()
     
     init(repoFullName: String, githubService: GithubService) {
@@ -44,6 +51,9 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         self.repoCollectionView.keyboardDismissMode = .onDrag
         self.repoCollectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
         self.view.addSubview(self.repoCollectionView)
+        self.repoCollectionView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view.snp.edges)
+        }
         
         self.bind()
     }
@@ -62,19 +72,20 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         
         let dataSource = RxCollectionViewSectionedReloadDataSource<GithubRepoSectionModel> { dataSource, collectionView, indexPath, item in
             switch dataSource[indexPath] {
-            case let .OwnerAvatarSectionItem(avatarURL):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OwnerAvatarCell", for: indexPath) as! OwnerAvatarCell
-                cell.configure(avatarURL: avatarURL)
-                return cell
-            case let .BasicInformationSectionItem(basicInformation):
+            case let .OwnerAvatarSectionItem(_, basicInformation):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicInformationCell", for: indexPath) as! RepoBasicInformationCell
                 cell.configure(basicInformation: basicInformation)
                 return cell
             }
-        } configureSupplementaryView: { dataSource, collectionView, Kind, indexPath in
-            return UICollectionReusableView()
+        } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            switch dataSource[indexPath] {
+            case let .OwnerAvatarSectionItem(avatarURL, _):
+                guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "OwnerAvatarSectionHeader", for: indexPath) as? OwnerAvatarSectionHeader else { return UICollectionReusableView() }
+                sectionHeader.configure(avatarURL: avatarURL)
+                return sectionHeader
+            }
         } moveItem: { dataSource, sourceIndexPath, destinationIndexPath in
-            
+
         } canMoveItemAtIndexPath: { dataSource, indexPath in
             return false
         }
@@ -82,28 +93,36 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         self.currentRepository
             .map({ githubRepo -> [GithubRepoSectionModel] in
                 let sections: [GithubRepoSectionModel] = [
-                    .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url)]),
-                    .BasicInformationSection(items: [.BasicInformationSectionItem(basicInformation: githubRepo.basicInformation)])
+                    .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url, basicInformation: githubRepo.basicInformation)])
                 ]
                 return sections
             })
             .bind(to: self.repoCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: self.disposeBag)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.repoCollectionView.frame = self.view.bounds
-    }
 }
 
 
 extension RepoViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let section = indexPath.section
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let stretchHeaderLayout = collectionViewLayout as? UICollectionViewStretchFlowLayout else { return CGSize(width: 0, height: 0) }
         if section == 0 {
-            return CGSize(width: collectionView.frame.width, height: 250.0)
+            stretchHeaderLayout.headerReferenceSize = CGSize(width: collectionView.frame.width, height: 250.0)
+            return stretchHeaderLayout.headerReferenceSize
         }
-        return CGSize(width: collectionView.frame.width, height: 100.0)
+        return CGSize(width: 0, height: 0)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height - 250 - self.topbarHeight)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
     }
 }

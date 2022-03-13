@@ -9,17 +9,22 @@ import UIKit
 import SnapKit
 
 class RepoBasicInformationCell: UICollectionViewCell {
-    fileprivate lazy var repoNameLabel: UILabel = UILabel()
+    fileprivate lazy var repoNameLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        return label
+    }()
+    fileprivate lazy var isModified: Bool = false
     
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
+        self.contentView.backgroundColor = .white
         self.contentView.addSubview(repoNameLabel)
         
         self.repoNameLabel.snp.makeConstraints { make in
             make.top.equalTo(self.contentView.snp.top)
             make.left.equalTo(self.contentView).offset(10)
             make.right.equalTo(self.contentView).offset(-10)
-            make.height.equalTo(50.0)
         }
     }
     

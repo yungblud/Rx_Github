@@ -17,6 +17,12 @@
 		8960539A27DDD00800550AE9 /* GithubRepoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8960539927DDD00800550AE9 /* GithubRepoSection.swift */; };
 		8960539C27DDD1E500550AE9 /* OwnerAvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8960539B27DDD1E500550AE9 /* OwnerAvatarCell.swift */; };
 		8960539E27DDD56600550AE9 /* RepoBasicInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8960539D27DDD56600550AE9 /* RepoBasicInformationCell.swift */; };
+		896053A127DDDB2900550AE9 /* UIViewController+topbarHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A027DDDB2900550AE9 /* UIViewController+topbarHeight.swift */; };
+		896053A327DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A227DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift */; };
+		896053A627DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A527DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift */; };
+		896053A827DE32EB00550AE9 /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A727DE32EB00550AE9 /* DefaultCollectionViewCell.swift */; };
+		896053AA27DE35D700550AE9 /* String+BoundingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A927DE35D700550AE9 /* String+BoundingRect.swift */; };
+		896053AC27DE35F100550AE9 /* Snap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053AB27DE35F100550AE9 /* Snap.swift */; };
 		89C6705827DB833900117E60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705727DB833900117E60 /* AppDelegate.swift */; };
 		89C6705A27DB833900117E60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705927DB833900117E60 /* SceneDelegate.swift */; };
 		89C6705C27DB833900117E60 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705B27DB833900117E60 /* SearchViewController.swift */; };
@@ -59,6 +65,12 @@
 		8960539927DDD00800550AE9 /* GithubRepoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubRepoSection.swift; sourceTree = "<group>"; };
 		8960539B27DDD1E500550AE9 /* OwnerAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerAvatarCell.swift; sourceTree = "<group>"; };
 		8960539D27DDD56600550AE9 /* RepoBasicInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoBasicInformationCell.swift; sourceTree = "<group>"; };
+		896053A027DDDB2900550AE9 /* UIViewController+topbarHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+topbarHeight.swift"; sourceTree = "<group>"; };
+		896053A227DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerAvatarSectionHeader.swift; sourceTree = "<group>"; };
+		896053A527DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewStretchFlowLayout.swift; sourceTree = "<group>"; };
+		896053A727DE32EB00550AE9 /* DefaultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCollectionViewCell.swift; sourceTree = "<group>"; };
+		896053A927DE35D700550AE9 /* String+BoundingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+BoundingRect.swift"; sourceTree = "<group>"; };
+		896053AB27DE35F100550AE9 /* Snap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snap.swift; sourceTree = "<group>"; };
 		89C6705427DB833900117E60 /* Rx_Github.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rx_Github.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6705727DB833900117E60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89C6705927DB833900117E60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +156,8 @@
 				8960539127DCF18600550AE9 /* RepoFullNameCell.swift */,
 				8960539B27DDD1E500550AE9 /* OwnerAvatarCell.swift */,
 				8960539D27DDD56600550AE9 /* RepoBasicInformationCell.swift */,
+				896053A227DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift */,
+				896053A727DE32EB00550AE9 /* DefaultCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -155,6 +169,24 @@
 				8960539927DDD00800550AE9 /* GithubRepoSection.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		8960539F27DDDB1B00550AE9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				896053A027DDDB2900550AE9 /* UIViewController+topbarHeight.swift */,
+				896053A927DE35D700550AE9 /* String+BoundingRect.swift */,
+				896053AB27DE35F100550AE9 /* Snap.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		896053A427DE0C3700550AE9 /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				896053A527DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift */,
+			);
+			path = Layouts;
 			sourceTree = "<group>";
 		};
 		89C6704B27DB833900117E60 = {
@@ -182,6 +214,8 @@
 		89C6705627DB833900117E60 /* Rx_Github */ = {
 			isa = PBXGroup;
 			children = (
+				896053A427DE0C3700550AE9 /* Layouts */,
+				8960539F27DDDB1B00550AE9 /* Extensions */,
 				8960539627DDCFCF00550AE9 /* Models */,
 				8960539527DDCF8900550AE9 /* Views */,
 				8960539427DDCF8000550AE9 /* ViewControllers */,
@@ -482,10 +516,16 @@
 			files = (
 				89C6705C27DB833900117E60 /* SearchViewController.swift in Sources */,
 				89C6705827DB833900117E60 /* AppDelegate.swift in Sources */,
+				896053A627DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift in Sources */,
 				8960539A27DDD00800550AE9 /* GithubRepoSection.swift in Sources */,
+				896053AC27DE35F100550AE9 /* Snap.swift in Sources */,
+				896053A127DDDB2900550AE9 /* UIViewController+topbarHeight.swift in Sources */,
 				8960539027DCF13700550AE9 /* RepoNameCell.swift in Sources */,
 				8960538C27DCCF8100550AE9 /* GithubService.swift in Sources */,
 				8960539827DDCFD800550AE9 /* GithubRepository.swift in Sources */,
+				896053A827DE32EB00550AE9 /* DefaultCollectionViewCell.swift in Sources */,
+				896053A327DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift in Sources */,
+				896053AA27DE35D700550AE9 /* String+BoundingRect.swift in Sources */,
 				8960539C27DDD1E500550AE9 /* OwnerAvatarCell.swift in Sources */,
 				8960539E27DDD56600550AE9 /* RepoBasicInformationCell.swift in Sources */,
 				8960538E27DCD5C300550AE9 /* RepoViewController.swift in Sources */,
