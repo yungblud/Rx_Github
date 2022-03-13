@@ -28,7 +28,10 @@ class GithubService {
                 guard let json = data as? [String: Any] else { return nil }
                 guard let name = json["name"] as? String else { return nil }
                 guard let fullName = json["full_name"] as? String else { return nil }
-                let githubRepository = GithubRepository(name: name, fullName: fullName)
+                guard let owner = json["owner"] as? [String: Any] else { return nil }
+                guard let ownerAvatarURL = owner["avatar_url"] as? String else { return nil }
+                let githubRepositoryOwner = GithubRepositoryOwner(avatar_url: ownerAvatarURL)
+                let githubRepository = GithubRepository(name: name, fullName: fullName, owner: githubRepositoryOwner)
                 return githubRepository
             })
             .catch { error in
