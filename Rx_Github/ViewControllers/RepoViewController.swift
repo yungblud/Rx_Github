@@ -15,6 +15,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
     fileprivate let repoFullName: String
     fileprivate let githubService: GithubService
     fileprivate var disposeBag = DisposeBag()
+    fileprivate var dataSource: RxCollectionViewSectionedReloadDataSource<GithubRepoSectionModel>? = nil
     
     fileprivate let currentRepository = PublishSubject<GithubRepository>()
     fileprivate lazy var repoCollectionView: UICollectionView = {
@@ -24,6 +25,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         cv.register(OwnerAvatarSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "OwnerAvatarSectionHeader")
         cv.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DefaultSectionHeader")
         cv.register(RepoBasicInformationCell.self, forCellWithReuseIdentifier: "BasicInformationCell")
+        cv.register(RepoDescriptionCell.self, forCellWithReuseIdentifier: "DescriptionCell")
         cv.register(DefaultCollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
         return cv
     }()
@@ -64,17 +66,16 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
             .compactMap { $0 }
             .bind(to: self.currentRepository)
             .disposed(by: self.disposeBag)
-    
-        self.currentRepository
-            .map { $0.basicInformation.full_name }
-            .bind(to: self.navigationItem.rx.title)
-            .disposed(by: self.disposeBag)
-        
+
         let dataSource = RxCollectionViewSectionedReloadDataSource<GithubRepoSectionModel> { dataSource, collectionView, indexPath, item in
             switch dataSource[indexPath] {
             case let .OwnerAvatarSectionItem(_, basicInformation):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicInformationCell", for: indexPath) as! RepoBasicInformationCell
                 cell.configure(basicInformation: basicInformation)
+                return cell
+            case let .RepoDescriptionSection(description):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DescriptionCell", for: indexPath) as! RepoDescriptionCell
+                cell.configure(description: description)
                 return cell
             }
         } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -83,17 +84,23 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
                 guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "OwnerAvatarSectionHeader", for: indexPath) as? OwnerAvatarSectionHeader else { return UICollectionReusableView() }
                 sectionHeader.configure(avatarURL: avatarURL)
                 return sectionHeader
+            default:
+                let defaultHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "DefaultSectionHeader", for: indexPath) as UICollectionReusableView
+                return defaultHeader
             }
         } moveItem: { dataSource, sourceIndexPath, destinationIndexPath in
 
         } canMoveItemAtIndexPath: { dataSource, indexPath in
             return false
         }
+        
+        self.dataSource = dataSource
 
         self.currentRepository
             .map({ githubRepo -> [GithubRepoSectionModel] in
                 let sections: [GithubRepoSectionModel] = [
-                    .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url, basicInformation: githubRepo.basicInformation)])
+                    .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url, basicInformation: githubRepo.basicInformation)]),
+                    .RepoDescriptionSection(items: [.RepoDescriptionSection(description: githubRepo.basicInformation.description)])
                 ]
                 return sections
             })
@@ -113,7 +120,20 @@ extension RepoViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: 0, height: 0)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height - 250 - self.topbarHeight)
+        var size = CGSize.zero
+        guard let dataSource = self.dataSource else { return CGSize.zero }
+        let section = dataSource.sectionModels[indexPath.section]
+        let targetItem = section.items[indexPath.item]
+        var collectionViewSize = collectionView.frame.size
+        collectionViewSize.width -= 20
+        switch targetItem {
+        case let .OwnerAvatarSectionItem(_, basicInformation):
+            size = "\(basicInformation.name)(\(basicInformation.full_name))".size(fits: collectionViewSize, font: .systemFont(ofSize: 25, weight: .bold), maximumNumberOfLines: 0)
+        case let .RepoDescriptionSection(description):
+            size = "\(description)".size(fits: collectionViewSize, font: .systemFont(ofSize: 12, weight: .medium), maximumNumberOfLines: 0)
+        }
+        size.width = collectionView.frame.width
+        return size
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
