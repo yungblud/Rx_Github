@@ -30,10 +30,15 @@ class GithubService {
                 guard let fullName = json["full_name"] as? String else { return nil }
                 guard let owner = json["owner"] as? [String: Any] else { return nil }
                 guard let ownerAvatarURL = owner["avatar_url"] as? String else { return nil }
-                guard let description = json["description"] as? String else { return nil }
+                let description = json["description"] as? String
+                guard let starGazersCount = json["stargazers_count"] as? Int else { return nil }
+                guard let watchersCount = json["watchers_count"] as? Int else { return nil }
+                guard let forksCount = json["forks_count"] as? Int else { return nil }
+                let language = json["language"] as? String
                 let githubRepositoryBasicInformation = GithubRepositoryBasicInformation(name: name, fullName: fullName, description: description)
                 let githubRepositoryOwner = GithubRepositoryOwner(avatar_url: ownerAvatarURL)
-                let githubRepository = GithubRepository(basicInformation: githubRepositoryBasicInformation, owner: githubRepositoryOwner)
+                let githubRepositoryCounts = GithubRepositoryCounts(starGazersCount: starGazersCount, watchersCount: watchersCount, forksCount: forksCount)
+                let githubRepository = GithubRepository(basicInformation: githubRepositoryBasicInformation, owner: githubRepositoryOwner, counts: githubRepositoryCounts, language: language)
                 return githubRepository
             })
             .catch { error in

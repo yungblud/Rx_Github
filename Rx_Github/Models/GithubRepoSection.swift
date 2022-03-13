@@ -10,11 +10,15 @@ import RxDataSources
 enum GithubRepoSectionModel {
     case OwnerAvatarSection(items: [GithubRepoSectionItem])
     case RepoDescriptionSection(items: [GithubRepoSectionItem])
+    case CountsSection(items: [GithubRepoSectionItem])
+    case LanguageSection(items: [GithubRepoSectionItem])
 }
 
 enum GithubRepoSectionItem {
     case OwnerAvatarSectionItem(avatarURL: String, basicInformation: GithubRepositoryBasicInformation)
     case RepoDescriptionSection(description: String)
+    case CountsSection(counts: GithubRepositoryCounts)
+    case LanguageSection(language: String)
 }
 
 extension GithubRepoSectionModel: SectionModelType {
@@ -26,6 +30,10 @@ extension GithubRepoSectionModel: SectionModelType {
             return items.map { $0 }
         case .RepoDescriptionSection(items: let items):
             return items.map { $0 }
+        case .CountsSection(items: let items):
+            return items.map { $0 }
+        case .LanguageSection(items: let items):
+            return items.map { $0 }
         }
     }
     
@@ -35,6 +43,10 @@ extension GithubRepoSectionModel: SectionModelType {
             self = .OwnerAvatarSection(items: items)
         case .RepoDescriptionSection(items: _):
             self = .RepoDescriptionSection(items: items)
+        case .CountsSection(items: _):
+            self = .CountsSection(items: items)
+        case .LanguageSection(items: _):
+            self = .LanguageSection(items: items)
         }
     }
 }

@@ -21,6 +21,8 @@
 		896053AA27DE35D700550AE9 /* String+BoundingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053A927DE35D700550AE9 /* String+BoundingRect.swift */; };
 		896053AC27DE35F100550AE9 /* Snap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053AB27DE35F100550AE9 /* Snap.swift */; };
 		896053AE27DE477700550AE9 /* RepoDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053AD27DE477700550AE9 /* RepoDescriptionCell.swift */; };
+		896053B027DE4EB900550AE9 /* RepoCountsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053AF27DE4EB900550AE9 /* RepoCountsCell.swift */; };
+		896053B227DE517600550AE9 /* RepoLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896053B127DE517600550AE9 /* RepoLanguageCell.swift */; };
 		89C6705827DB833900117E60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705727DB833900117E60 /* AppDelegate.swift */; };
 		89C6705A27DB833900117E60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705927DB833900117E60 /* SceneDelegate.swift */; };
 		89C6705C27DB833900117E60 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6705B27DB833900117E60 /* SearchViewController.swift */; };
@@ -67,6 +69,8 @@
 		896053A927DE35D700550AE9 /* String+BoundingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+BoundingRect.swift"; sourceTree = "<group>"; };
 		896053AB27DE35F100550AE9 /* Snap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snap.swift; sourceTree = "<group>"; };
 		896053AD27DE477700550AE9 /* RepoDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoDescriptionCell.swift; sourceTree = "<group>"; };
+		896053AF27DE4EB900550AE9 /* RepoCountsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoCountsCell.swift; sourceTree = "<group>"; };
+		896053B127DE517600550AE9 /* RepoLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoLanguageCell.swift; sourceTree = "<group>"; };
 		89C6705427DB833900117E60 /* Rx_Github.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rx_Github.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6705727DB833900117E60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89C6705927DB833900117E60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -152,6 +156,8 @@
 				896053A227DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift */,
 				896053A727DE32EB00550AE9 /* DefaultCollectionViewCell.swift */,
 				896053AD27DE477700550AE9 /* RepoDescriptionCell.swift */,
+				896053AF27DE4EB900550AE9 /* RepoCountsCell.swift */,
+				896053B127DE517600550AE9 /* RepoLanguageCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -509,11 +515,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				89C6705C27DB833900117E60 /* SearchViewController.swift in Sources */,
+				896053B027DE4EB900550AE9 /* RepoCountsCell.swift in Sources */,
 				89C6705827DB833900117E60 /* AppDelegate.swift in Sources */,
 				896053A627DE0C4400550AE9 /* UICollectionViewStretchFlowLayout.swift in Sources */,
 				8960539A27DDD00800550AE9 /* GithubRepoSection.swift in Sources */,
 				896053AC27DE35F100550AE9 /* Snap.swift in Sources */,
 				896053A127DDDB2900550AE9 /* UIViewController+topbarHeight.swift in Sources */,
+				896053B227DE517600550AE9 /* RepoLanguageCell.swift in Sources */,
 				8960538C27DCCF8100550AE9 /* GithubService.swift in Sources */,
 				8960539827DDCFD800550AE9 /* GithubRepository.swift in Sources */,
 				896053A827DE32EB00550AE9 /* DefaultCollectionViewCell.swift in Sources */,

@@ -25,14 +25,15 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         cv.register(OwnerAvatarSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "OwnerAvatarSectionHeader")
         cv.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DefaultSectionHeader")
         cv.register(RepoBasicInformationCell.self, forCellWithReuseIdentifier: "BasicInformationCell")
+        cv.register(RepoCountsCell.self, forCellWithReuseIdentifier: "CountsCell")
         cv.register(RepoDescriptionCell.self, forCellWithReuseIdentifier: "DescriptionCell")
+        cv.register(RepoLanguageCell.self, forCellWithReuseIdentifier: "LanguageCell")
         cv.register(DefaultCollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
         return cv
     }()
     fileprivate lazy var repoCollectionViewFlowLayout: UICollectionViewStretchFlowLayout = {
         let layout = UICollectionViewStretchFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         return layout
     }()
     
@@ -73,9 +74,17 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicInformationCell", for: indexPath) as! RepoBasicInformationCell
                 cell.configure(basicInformation: basicInformation)
                 return cell
+            case let .CountsSection(counts):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CountsCell", for: indexPath) as! RepoCountsCell
+                cell.configure(counts: counts)
+                return cell
             case let .RepoDescriptionSection(description):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DescriptionCell", for: indexPath) as! RepoDescriptionCell
                 cell.configure(description: description)
+                return cell
+            case let .LanguageSection(language):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LanguageCell", for: indexPath) as! RepoLanguageCell
+                cell.configure(language: language)
                 return cell
             }
         } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -98,10 +107,16 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
 
         self.currentRepository
             .map({ githubRepo -> [GithubRepoSectionModel] in
-                let sections: [GithubRepoSectionModel] = [
+                var sections: [GithubRepoSectionModel] = [
                     .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url, basicInformation: githubRepo.basicInformation)]),
-                    .RepoDescriptionSection(items: [.RepoDescriptionSection(description: githubRepo.basicInformation.description)])
+                    .CountsSection(items: [.CountsSection(counts: githubRepo.counts)]),
                 ]
+                if let language = githubRepo.language {
+                    sections.append(.LanguageSection(items: [.LanguageSection(language: language)]))
+                }
+                if let description = githubRepo.basicInformation.description {
+                    sections.append(.RepoDescriptionSection(items: [.RepoDescriptionSection(description: description)]))
+                }
                 return sections
             })
             .bind(to: self.repoCollectionView.rx.items(dataSource: dataSource))
@@ -129,14 +144,18 @@ extension RepoViewController: UICollectionViewDelegateFlowLayout {
         switch targetItem {
         case let .OwnerAvatarSectionItem(_, basicInformation):
             size = "\(basicInformation.name)(\(basicInformation.full_name))".size(fits: collectionViewSize, font: .systemFont(ofSize: 25, weight: .bold), maximumNumberOfLines: 0)
+        case let .CountsSection(counts):
+            size = "👁‍🗨 \(counts.watchers_count) / ⭐️ \(counts.stargazers_count) / 🍴 \(counts.forks_count)".size(fits: collectionViewSize, font: .systemFont(ofSize: 13, weight: .semibold), maximumNumberOfLines: 1)
         case let .RepoDescriptionSection(description):
             size = "\(description)".size(fits: collectionViewSize, font: .systemFont(ofSize: 12, weight: .medium), maximumNumberOfLines: 0)
+        case let .LanguageSection(language):
+            size = "🔠 \(language)".size(fits: collectionViewSize, font: .systemFont(ofSize: 13, weight: .semibold), maximumNumberOfLines: 1)
         }
         size.width = collectionView.frame.width
         return size
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
