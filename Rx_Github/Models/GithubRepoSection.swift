@@ -8,11 +8,13 @@
 import RxDataSources
 
 enum GithubRepoSectionModel {
+    case OwnerAvatarSection(items: [GithubRepoSectionItem])
     case FullNameSection(items: [GithubRepoSectionItem])
     case NameSection(items: [GithubRepoSectionItem])
 }
 
 enum GithubRepoSectionItem {
+    case OwnerAvatarSectionItem(avatarURL: String)
     case FullNameSectionItem(fullName: String)
     case NameSectionItem(name: String)
 }
@@ -22,6 +24,8 @@ extension GithubRepoSectionModel: SectionModelType {
     
     var items: [GithubRepoSectionItem] {
         switch self {
+        case .OwnerAvatarSection(items: let items):
+            return items.map { $0 }
         case .FullNameSection(items: let items):
             return items.map { $0 }
         case .NameSection(items: let items):
@@ -31,6 +35,8 @@ extension GithubRepoSectionModel: SectionModelType {
     
     init(original: GithubRepoSectionModel, items: [GithubRepoSectionItem]) {
         switch original {
+        case .OwnerAvatarSection(items: _):
+            self = .OwnerAvatarSection(items: items)
         case .FullNameSection(items: _):
             self = .FullNameSection(items: items)
         case .NameSection(items: _):

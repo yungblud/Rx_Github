@@ -21,6 +21,8 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.alwaysBounceVertical = true
+        cv.register(OwnerAvatarCell.self, forCellWithReuseIdentifier: "OwnerAvatarCell")
         cv.register(RepoNameCell.self, forCellWithReuseIdentifier: "RepoNameCell")
         cv.register(RepoFullNameCell.self, forCellWithReuseIdentifier: "RepoFullNameCell")
         return cv
@@ -61,6 +63,10 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         
         let dataSource = RxCollectionViewSectionedReloadDataSource<GithubRepoSectionModel> { dataSource, collectionView, indexPath, item in
             switch dataSource[indexPath] {
+            case let .OwnerAvatarSectionItem(avatarURL):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OwnerAvatarCell", for: indexPath) as! OwnerAvatarCell
+                cell.configure(avatarURL: avatarURL)
+                return cell
             case let .FullNameSectionItem(fullName):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RepoFullNameCell", for: indexPath) as! RepoFullNameCell
                 cell.configure(fullName: fullName)
@@ -82,6 +88,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         self.currentRepository
             .map({ githubRepo -> [GithubRepoSectionModel] in
                 let sections: [GithubRepoSectionModel] = [
+                    .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url)]),
                     .FullNameSection(items: [.FullNameSectionItem(fullName: githubRepo.full_name)]),
                     .NameSection(items: [.NameSectionItem(name: githubRepo.name)])
                 ]
@@ -100,6 +107,10 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
 
 extension RepoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let section = indexPath.section
+        if section == 0 {
+            return CGSize(width: collectionView.frame.width, height: 250.0)
+        }
         return CGSize(width: collectionView.frame.width, height: 50.0)
     }
 }
