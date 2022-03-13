@@ -22,9 +22,8 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.alwaysBounceVertical = true
+        cv.register(RepoBasicInformationCell.self, forCellWithReuseIdentifier: "BasicInformationCell")
         cv.register(OwnerAvatarCell.self, forCellWithReuseIdentifier: "OwnerAvatarCell")
-        cv.register(RepoNameCell.self, forCellWithReuseIdentifier: "RepoNameCell")
-        cv.register(RepoFullNameCell.self, forCellWithReuseIdentifier: "RepoFullNameCell")
         return cv
     }()
     
@@ -57,7 +56,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
             .disposed(by: self.disposeBag)
     
         self.currentRepository
-            .map { $0.full_name }
+            .map { $0.basicInformation.full_name }
             .bind(to: self.navigationItem.rx.title)
             .disposed(by: self.disposeBag)
         
@@ -67,14 +66,9 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OwnerAvatarCell", for: indexPath) as! OwnerAvatarCell
                 cell.configure(avatarURL: avatarURL)
                 return cell
-            case let .FullNameSectionItem(fullName):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RepoFullNameCell", for: indexPath) as! RepoFullNameCell
-                cell.configure(fullName: fullName)
-                return cell
-            case let .NameSectionItem(name):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RepoNameCell", for: indexPath) as! RepoNameCell
-                print("nameCheck \(name)")
-                cell.configure(name: name)
+            case let .BasicInformationSectionItem(basicInformation):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BasicInformationCell", for: indexPath) as! RepoBasicInformationCell
+                cell.configure(basicInformation: basicInformation)
                 return cell
             }
         } configureSupplementaryView: { dataSource, collectionView, Kind, indexPath in
@@ -89,8 +83,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
             .map({ githubRepo -> [GithubRepoSectionModel] in
                 let sections: [GithubRepoSectionModel] = [
                     .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url)]),
-                    .FullNameSection(items: [.FullNameSectionItem(fullName: githubRepo.full_name)]),
-                    .NameSection(items: [.NameSectionItem(name: githubRepo.name)])
+                    .BasicInformationSection(items: [.BasicInformationSectionItem(basicInformation: githubRepo.basicInformation)])
                 ]
                 return sections
             })
@@ -111,6 +104,6 @@ extension RepoViewController: UICollectionViewDelegateFlowLayout {
         if section == 0 {
             return CGSize(width: collectionView.frame.width, height: 250.0)
         }
-        return CGSize(width: collectionView.frame.width, height: 50.0)
+        return CGSize(width: collectionView.frame.width, height: 100.0)
     }
 }

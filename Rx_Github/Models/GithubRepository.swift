@@ -8,14 +8,24 @@
 import Foundation
 
 struct GithubRepository: Codable {
-    var name: String
-    var full_name: String
+    var basicInformation: GithubRepositoryBasicInformation
     var owner: GithubRepositoryOwner
     
-    init(name: String, fullName: String, owner: GithubRepositoryOwner) {
+    init(basicInformation: GithubRepositoryBasicInformation, owner: GithubRepositoryOwner) {
+        self.basicInformation = basicInformation
+        self.owner = owner
+    }
+}
+
+struct GithubRepositoryBasicInformation: Codable {
+    var name: String
+    var full_name: String
+    var description: String
+    
+    init(name: String, fullName: String, description: String) {
         self.name = name
         self.full_name = fullName
-        self.owner = owner
+        self.description = description
     }
 }
 
