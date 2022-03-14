@@ -16,6 +16,13 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
     fileprivate let githubService: GithubService
     fileprivate var disposeBag = DisposeBag()
     fileprivate var dataSource: RxCollectionViewSectionedReloadDataSource<GithubRepoSectionModel>? = nil
+    fileprivate var htmlURL: String? = nil
+    
+    fileprivate let fixedBottomButton: UIButton = {
+        let btn = FixedBottomButton(frame: .zero)
+        btn.setTitle("View it on github", for: .normal)
+        return btn
+    }()
     
     fileprivate let currentRepository = PublishSubject<GithubRepository>()
     fileprivate lazy var repoCollectionView: UICollectionView = {
@@ -56,6 +63,14 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
         self.view.addSubview(self.repoCollectionView)
         self.repoCollectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.view.snp.edges)
+        }
+        
+        self.view.addSubview(self.fixedBottomButton)
+        self.fixedBottomButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(60.0)
         }
         
         self.bind()
@@ -111,6 +126,7 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
                     .OwnerAvatarSection(items: [.OwnerAvatarSectionItem(avatarURL: githubRepo.owner.avatar_url, basicInformation: githubRepo.basicInformation)]),
                     .CountsSection(items: [.CountsSection(counts: githubRepo.counts)]),
                 ]
+                self.htmlURL = githubRepo.basicInformation.html_url
                 if let language = githubRepo.language {
                     sections.append(.LanguageSection(items: [.LanguageSection(language: language)]))
                 }
@@ -120,6 +136,20 @@ class RepoViewController: UIViewController, UIScrollViewDelegate {
                 return sections
             })
             .bind(to: self.repoCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: self.disposeBag)
+        
+        self.fixedBottomButton.rx.tap
+            .subscribe { [weak self] _ in
+                guard let `self` = self else { return }
+                guard let htmlURL = self.htmlURL else { return }
+                if let url = URL(string: htmlURL) {
+                    if UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:]) { isOpen in
+                            
+                        }
+                    }
+                }
+            }
             .disposed(by: self.disposeBag)
     }
 }

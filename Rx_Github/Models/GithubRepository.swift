@@ -27,13 +27,15 @@ struct GithubRepositoryBasicInformation: Codable {
     var name: String
     var full_name: String
     var description: String?
+    var html_url: String
     
-    init(name: String, fullName: String, description: String?) {
+    init(name: String, fullName: String, description: String?, htmlURL: String) {
         self.name = name
         self.full_name = fullName
         if let description = description {
             self.description = description
         }
+        self.html_url = htmlURL
     }
 }
 

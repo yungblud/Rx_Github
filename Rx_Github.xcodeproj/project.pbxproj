@@ -32,6 +32,8 @@
 		89C6706F27DB833B00117E60 /* Rx_GithubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6706E27DB833B00117E60 /* Rx_GithubTests.swift */; };
 		89C6707927DB833B00117E60 /* Rx_GithubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6707827DB833B00117E60 /* Rx_GithubUITests.swift */; };
 		89C6707B27DB833B00117E60 /* Rx_GithubUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6707A27DB833B00117E60 /* Rx_GithubUITestsLaunchTests.swift */; };
+		89F04CBD27DEE0AD00FCA978 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F04CBC27DEE0AC00FCA978 /* UIColor.swift */; };
+		89F04CBF27DEE13A00FCA978 /* FixedBottomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F04CBE27DEE13A00FCA978 /* FixedBottomButton.swift */; };
 		BBEFC2BD3FBDC1682E4A0B9F /* Pods_Rx_GithubTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147376BBB1FD87E11DB68072 /* Pods_Rx_GithubTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +86,8 @@
 		89C6707427DB833B00117E60 /* Rx_GithubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Rx_GithubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6707827DB833B00117E60 /* Rx_GithubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rx_GithubUITests.swift; sourceTree = "<group>"; };
 		89C6707A27DB833B00117E60 /* Rx_GithubUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rx_GithubUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		89F04CBC27DEE0AC00FCA978 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		89F04CBE27DEE13A00FCA978 /* FixedBottomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedBottomButton.swift; sourceTree = "<group>"; };
 		A431299593D5455FDECCF18E /* Pods-Rx_GithubTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rx_GithubTests.debug.xcconfig"; path = "Target Support Files/Pods-Rx_GithubTests/Pods-Rx_GithubTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A66B42F661A67325C0E8AAE4 /* Pods-Rx_GithubTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rx_GithubTests.release.xcconfig"; path = "Target Support Files/Pods-Rx_GithubTests/Pods-Rx_GithubTests.release.xcconfig"; sourceTree = "<group>"; };
 		BD45F58E8B24669BBC3C6CE9 /* Pods_Rx_Github_Rx_GithubUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rx_Github_Rx_GithubUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +162,7 @@
 				896053AD27DE477700550AE9 /* RepoDescriptionCell.swift */,
 				896053AF27DE4EB900550AE9 /* RepoCountsCell.swift */,
 				896053B127DE517600550AE9 /* RepoLanguageCell.swift */,
+				89F04CBE27DEE13A00FCA978 /* FixedBottomButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				896053A027DDDB2900550AE9 /* UIViewController+topbarHeight.swift */,
 				896053A927DE35D700550AE9 /* String+BoundingRect.swift */,
 				896053AB27DE35F100550AE9 /* Snap.swift */,
+				89F04CBC27DEE0AC00FCA978 /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -527,7 +533,9 @@
 				896053A827DE32EB00550AE9 /* DefaultCollectionViewCell.swift in Sources */,
 				896053A327DDE76F00550AE9 /* OwnerAvatarSectionHeader.swift in Sources */,
 				896053AA27DE35D700550AE9 /* String+BoundingRect.swift in Sources */,
+				89F04CBD27DEE0AD00FCA978 /* UIColor.swift in Sources */,
 				8960539E27DDD56600550AE9 /* RepoBasicInformationCell.swift in Sources */,
+				89F04CBF27DEE13A00FCA978 /* FixedBottomButton.swift in Sources */,
 				8960538E27DCD5C300550AE9 /* RepoViewController.swift in Sources */,
 				896053AE27DE477700550AE9 /* RepoDescriptionCell.swift in Sources */,
 				89C6705A27DB833900117E60 /* SceneDelegate.swift in Sources */,

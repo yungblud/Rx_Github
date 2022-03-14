@@ -35,7 +35,8 @@ class GithubService {
                 guard let watchersCount = json["watchers_count"] as? Int else { return nil }
                 guard let forksCount = json["forks_count"] as? Int else { return nil }
                 let language = json["language"] as? String
-                let githubRepositoryBasicInformation = GithubRepositoryBasicInformation(name: name, fullName: fullName, description: description)
+                guard let htmlURL = json["html_url"] as? String else { return nil }
+                let githubRepositoryBasicInformation = GithubRepositoryBasicInformation(name: name, fullName: fullName, description: description, htmlURL: htmlURL)
                 let githubRepositoryOwner = GithubRepositoryOwner(avatar_url: ownerAvatarURL)
                 let githubRepositoryCounts = GithubRepositoryCounts(starGazersCount: starGazersCount, watchersCount: watchersCount, forksCount: forksCount)
                 let githubRepository = GithubRepository(basicInformation: githubRepositoryBasicInformation, owner: githubRepositoryOwner, counts: githubRepositoryCounts, language: language)
